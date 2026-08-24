@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="theme-color" content="#fffdfa">
+<meta name="theme-color" content="#ffffff">
 <title>今天吃什么喵</title>
 <style>
   :root{
@@ -40,9 +40,21 @@
     #spin:active{transform:translate(-50%,-50%) scale(.92);}
   #spin:disabled{opacity:.45;}
 
-  .result{margin-top:30px;font-size:19px;font-weight:600;letter-spacing:2px;min-height:46px;display:flex;align-items:center;}
+  #pin{transform-box:view-box;transform-origin:200px 24px;transition:transform .07s ease-out;}
+
+  .result{position:relative;margin-top:30px;font-size:19px;font-weight:600;letter-spacing:2px;min-height:46px;display:flex;align-items:center;justify-content:center;}
   .result span{border:2.5px solid var(--ink);background:var(--red);color:#fff;border-radius:999px;padding:8px 24px;animation:pop .4s cubic-bezier(.2,1.3,.4,1);}
   @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:scale(1);opacity:1}}
+
+  /* 爪印爆开 */
+  .burst{position:absolute;left:50%;top:50%;width:0;height:0;pointer-events:none;}
+  .burst svg{position:absolute;width:22px;height:22px;left:-11px;top:-11px;
+    animation:paw .85s cubic-bezier(.18,.9,.3,1) forwards;}
+  @keyframes paw{
+    0%{transform:translate(0,0) scale(.2) rotate(0);opacity:0}
+    25%{opacity:1}
+    100%{transform:translate(var(--dx),var(--dy)) scale(1) rotate(var(--rz));opacity:0}
+  }
 
   .again{display:none;margin-top:14px;border:2.5px solid var(--ink);background:#fff;color:var(--ink2);
     border-radius:999px;padding:9px 22px;font-family:inherit;font-size:14px;font-weight:600;letter-spacing:1px;}
@@ -95,7 +107,7 @@
         <circle cx="0" cy="-1" r="8"/>
       </g>
       <!-- 指针 -->
-      <path d="M200 58 L186 22 L214 22 Z" fill="var(--red)"/>
+      <path id="pin" d="M200 58 L186 22 L214 22 Z" fill="var(--red)"/>
     </g>
     <!-- 转盘本体 -->
     <g class="rotor" id="rotor"></g>
@@ -116,7 +128,7 @@
 </div>
 
 <script>
-const DEFAULT=["梅果","泥靴","Oeat","胡恰","三出山","随岭","采","木浦"];
+const DEFAULT=["梅果","泥靴","Oeat","胡恰","三出山","很久以前","采","木浦"];
 let items=JSON.parse(localStorage.getItem("kittyLine2")||"null")||DEFAULT.slice();
 const rotor=document.getElementById("rotor");
 const CX=200,CY=200,R=136;
@@ -173,6 +185,44 @@ function render(){
     l.appendChild(d);
   });
 }
+/* 指针每经过一条分割线抖一下 */
+const pin=document.getElementById("pin");
+let raf=null,lastSeg=null,tickT=0;
+function watchTicks(){
+  const n=items.length;if(!n)return;
+  const seg=360/n;
+  const m=new DOMMatrixReadOnly(getComputedStyle(rotor).transform);
+  let a=Math.atan2(m.b,m.a)*180/Math.PI;
+  a=((a%360)+360)%360;
+  const k=Math.floor(a/seg);
+  if(lastSeg!==null&&k!==lastSeg){
+    pin.style.transform="rotate(-14deg)";
+    clearTimeout(tickT);
+    tickT=setTimeout(()=>{pin.style.transform="rotate(0deg)";},70);
+    if(navigator.vibrate)navigator.vibrate(6);
+  }
+  lastSeg=k;
+  raf=requestAnimationFrame(watchTicks);
+}
+/* 结果弹出时爪印爆开 */
+const PAW='<svg viewBox="0 0 24 24" fill="C"><ellipse cx="12" cy="15.5" rx="6.4" ry="5.4"/><circle cx="4.6" cy="9" r="2.5"/><circle cx="9.6" cy="5.4" r="2.7"/><circle cx="15.2" cy="5.6" r="2.7"/><circle cx="19.8" cy="9.6" r="2.4"/></svg>';
+function burst(host){
+  const b=document.createElement("div");b.className="burst";
+  for(let i=0;i<8;i++){
+    const ang=(-160+i*20-10+Math.random()*20)*Math.PI/180;
+    const d=64+Math.random()*46;
+    const el=document.createElement("div");
+    el.innerHTML=PAW.replace("C",i%2?"var(--red)":"var(--ink)");
+    const svg=el.firstChild;
+    svg.style.setProperty("--dx",(Math.cos(ang)*d*1.5).toFixed(1)+"px");
+    svg.style.setProperty("--dy",(Math.sin(ang)*d).toFixed(1)+"px");
+    svg.style.setProperty("--rz",(Math.random()*140-70).toFixed(0)+"deg");
+    svg.style.animationDelay=(Math.random()*90).toFixed(0)+"ms";
+    b.appendChild(svg);
+  }
+  host.appendChild(b);
+  setTimeout(()=>b.remove(),1100);
+}
 function go(){
   if(spinning||!items.length)return;
   spinning=true;
@@ -182,11 +232,16 @@ function go(){
   const n=items.length,idx=Math.floor(Math.random()*n),seg=360/n;
   rot += 360*5 + (360 - (idx*seg + seg/2));
   rotor.style.transform="rotate("+rot+"deg)";
+  lastSeg=null;cancelAnimationFrame(raf);raf=requestAnimationFrame(watchTicks);
   setTimeout(()=>{
+    cancelAnimationFrame(raf);raf=null;
+    pin.style.transform="rotate(0deg)";
+    const res=document.getElementById("res");
     const s=document.createElement("span");s.textContent=items[idx];
-    document.getElementById("res").appendChild(s);
+    res.appendChild(s);
+    burst(res);
     document.getElementById("again").classList.add("on");
-    if(navigator.vibrate)navigator.vibrate(25);
+    if(navigator.vibrate)navigator.vibrate([28,50,18]);
     spinning=false;btn.disabled=false;
   },4850);
 }
