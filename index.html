@@ -20,8 +20,10 @@
     font-family:-apple-system,"PingFang SC","Hiragino Sans GB",sans-serif;
     background:var(--bg);color:var(--ink2);
     display:flex;flex-direction:column;align-items:center;
-    padding:calc(24px + env(safe-area-inset-top)) 18px calc(24px + env(safe-area-inset-bottom));
+    padding:calc(24px + env(safe-area-inset-top)) 18px calc(96px + env(safe-area-inset-bottom));
   }
+  .page{display:none;width:100%;flex-direction:column;align-items:center;flex:1;}
+  .page.on{display:flex;}
   header{text-align:center;}
   h1{font-size:22px;font-weight:600;letter-spacing:3px;color:var(--ink2);}
   .sub{font-size:11px;letter-spacing:3px;color:var(--red);margin-top:8px;}
@@ -74,10 +76,42 @@
   .add input::placeholder{color:#bdbdbd;}
   .add button{border:1.5px solid var(--ink);border-radius:999px;background:none;color:var(--ink2);
     font-family:inherit;font-size:14px;font-weight:600;padding:0 20px;}
+
+  /* ===== 列表页 ===== */
+  .list-wrap{width:min(94vw,420px);margin-top:20px;}
+  .sec-title{font-size:11px;letter-spacing:4px;color:var(--red);text-align:center;margin-bottom:16px;}
+  .card{border:2.5px solid var(--ink);border-radius:16px;padding:14px 16px;margin-bottom:12px;position:relative;}
+  .card.done{opacity:.45;}
+  .card .top{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .card .no{font-size:11px;letter-spacing:1px;color:#9a9a9a;}
+  .card h3{font-size:16px;font-weight:700;letter-spacing:1px;flex:1;}
+  .card.done h3{text-decoration:line-through;}
+  .card .body{font-size:14px;line-height:1.6;letter-spacing:.5px;}
+  .card .row{display:flex;gap:6px;font-size:12.5px;color:#7a7a7a;margin-top:6px;letter-spacing:.5px;}
+  .card .row b{color:var(--ink2);font-weight:600;}
+  .card .note{margin-top:10px;padding-top:9px;border-top:1.5px dashed #d8d8d8;font-size:12.5px;color:#7a7a7a;}
+  .card .label{display:inline-block;font-size:10px;letter-spacing:2px;color:#9a9a9a;margin-right:6px;}
+  .pill{font-size:11px;font-weight:700;letter-spacing:1px;border-radius:999px;padding:3px 10px;border:2px solid var(--ink);}
+  .pill.red{background:var(--red);color:#fff;border-color:var(--red);}
+  .pill.yellow{background:var(--yellow);color:var(--ink);border-color:var(--ink);}
+  .pill.plain{background:#fff;color:#9a9a9a;border-color:#d4d4d4;}
+  .pill.ink{background:var(--ink);color:#fff;}
+  .empty{text-align:center;color:#bdbdbd;font-size:13px;letter-spacing:2px;padding:40px 0;}
+
+  /* ===== 底部标签栏 ===== */
+  .tabs{position:fixed;left:0;right:0;bottom:0;display:flex;background:var(--bg);
+    border-top:2.5px solid var(--ink);padding-bottom:env(safe-area-inset-bottom);z-index:9;}
+  .tabs button{flex:1;background:none;border:none;font-family:inherit;padding:11px 0 13px;
+    font-size:12px;letter-spacing:2px;color:#b0b0b0;position:relative;}
+  .tabs button.on{color:var(--ink2);font-weight:700;}
+  .tabs button.on::after{content:"";position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
+    width:18px;height:2.5px;border-radius:2px;background:var(--red);}
+  .tabs .dot{position:absolute;top:8px;margin-left:3px;width:7px;height:7px;border-radius:50%;background:var(--red);}
 </style>
 </head>
 <body>
 
+<div class="page on" id="page-wheel">
 <header>
   <h1>今天吃什么喵</h1>
   <div class="sub" id="sub">TAP TO SPIN</div>
@@ -126,6 +160,27 @@
     <button id="addBtn">添加</button>
   </div>
 </div>
+</div><!-- /page-wheel -->
+
+<div class="page" id="page-topic">
+  <div class="list-wrap">
+    <div class="sec-title">议题收集</div>
+    <div id="topicList"></div>
+  </div>
+</div>
+
+<div class="page" id="page-res">
+  <div class="list-wrap">
+    <div class="sec-title">决议</div>
+    <div id="resList"></div>
+  </div>
+</div>
+
+<nav class="tabs">
+  <button data-page="wheel" class="on">转盘</button>
+  <button data-page="topic">议题</button>
+  <button data-page="res">决议<span class="dot" id="dot" style="display:none"></span></button>
+</nav>
 
 <script>
 /* 从 2026-08-30 起算，每次打开显示第几天 */
@@ -267,6 +322,71 @@ document.getElementById("addBtn").onclick=()=>{
 };
 document.getElementById("inp").addEventListener("keydown",e=>{if(e.key==="Enter")document.getElementById("addBtn").click();});
 render();
+
+/* ========== 议题 / 决议 数据（改这里即可） ========== */
+const TOPICS=[
+  {no:1,plan:"2026/9/25-2026/9/27",topic:"中秋节-飞花令",from:"包包",join:"秀秀",
+   pri:"高",actual:"",note:"输的人吃五仁月饼"}
+];
+const RESOLUTIONS=[
+  {date:"2026/9/15",cat:"决议1",
+   content:'关于笨蛋包凡误用"XxiuU"称谓事件的复盘及整改',
+   action:"笨蛋包凡改一个隔路的专属秀秀的备注",
+   status:"未完成",due:"看笨蛋包心情",valid:"有效"}
+];
+/* ================================================= */
+
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const PRI={"高":"red","中":"yellow","低":"plain"};
+
+function renderTopics(){
+  const box=document.getElementById("topicList");
+  if(!TOPICS.length){box.innerHTML='<div class="empty">暂无议题</div>';return;}
+  box.innerHTML=TOPICS.map(t=>`
+    <div class="card">
+      <div class="top">
+        <span class="no">NO.${esc(t.no)}</span>
+        <h3>${esc(t.topic)}</h3>
+        <span class="pill ${PRI[t.pri]||"plain"}">${esc(t.pri)}</span>
+      </div>
+      <div class="row"><b>${esc(t.from)}</b> 发起${t.join?` · 需 <b>${esc(t.join)}</b> 参与`:""}</div>
+      <div class="row"><span class="label">计划</span>${esc(t.plan)}${t.actual?`　<span class="label">实际</span>${esc(t.actual)}`:""}</div>
+      ${t.note?`<div class="note">${esc(t.note)}</div>`:""}
+    </div>`).join("");
+}
+
+function renderRes(){
+  const box=document.getElementById("resList");
+  if(!RESOLUTIONS.length){box.innerHTML='<div class="empty">暂无决议</div>';return;}
+  const order=r=>r.status==="已完成"?1:0;
+  const list=RESOLUTIONS.slice().sort((a,b)=>order(a)-order(b));
+  box.innerHTML=list.map(r=>{
+    const done=r.status==="已完成";
+    const cls=done?"ink":(r.status==="进行中"?"yellow":"red");
+    return `
+    <div class="card${done?" done":""}">
+      <div class="top">
+        <span class="no">${esc(r.cat)}</span>
+        <span class="pill ${cls}" style="margin-left:auto">${esc(r.status)}</span>
+      </div>
+      <div class="body">${esc(r.content)}</div>
+      <div class="note"><span class="label">采取措施</span>${esc(r.action)}</div>
+      <div class="row"><span class="label">会议</span>${esc(r.date)}　<span class="label">截止</span>${esc(r.due)}　<span class="label">状态</span>${esc(r.valid)}</div>
+    </div>`;}).join("");
+  const undone=RESOLUTIONS.filter(r=>r.status!=="已完成").length;
+  document.getElementById("dot").style.display=undone?"inline-block":"none";
+}
+
+document.querySelectorAll(".tabs button").forEach(b=>{
+  b.onclick=()=>{
+    document.querySelectorAll(".tabs button").forEach(x=>x.classList.remove("on"));
+    document.querySelectorAll(".page").forEach(p=>p.classList.remove("on"));
+    b.classList.add("on");
+    document.getElementById("page-"+b.dataset.page).classList.add("on");
+    window.scrollTo(0,0);
+  };
+});
+renderTopics();renderRes();
 </script>
 </body>
 </html>
