@@ -107,6 +107,85 @@
   .tabs button.on::after{content:"";position:absolute;left:50%;bottom:6px;transform:translateX(-50%);
     width:18px;height:2.5px;border-radius:2px;background:var(--red);}
   .tabs .dot{position:absolute;top:8px;margin-left:3px;width:7px;height:7px;border-radius:50%;background:var(--red);}
+
+  /* ===== 编辑相关 ===== */
+  .card .ops{display:flex;gap:8px;justify-content:flex-end;margin-top:10px;}
+  .card .ops button{border:1.5px solid #d4d4d4;background:none;border-radius:999px;
+    font-family:inherit;font-size:11px;letter-spacing:1px;color:#8a8a8a;padding:4px 12px;}
+  .card .ops button:active{background:#f4f4f4;}
+  .addbtn{width:100%;border:2px dashed var(--ink);background:none;border-radius:16px;
+    font-family:inherit;font-size:13px;font-weight:600;letter-spacing:2px;color:var(--ink2);padding:12px;margin-top:2px;}
+  .tools{display:flex;gap:10px;margin:18px 0 6px;}
+  .tools button{flex:1;border:none;background:none;font-family:inherit;font-size:11px;
+    letter-spacing:2px;color:#b0b0b0;padding:6px;text-decoration:underline;text-underline-offset:3px;}
+
+  .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.35);z-index:20;
+    align-items:flex-end;justify-content:center;}
+  .modal.on{display:flex;}
+  .sheet{width:min(100%,460px);background:var(--bg);border:2.5px solid var(--ink);
+    border-bottom:none;border-radius:20px 20px 0 0;max-height:88vh;display:flex;flex-direction:column;
+    animation:up .25s cubic-bezier(.2,.9,.3,1);}
+  @keyframes up{from{transform:translateY(24px);opacity:.4}to{transform:translateY(0);opacity:1}}
+  .sheet-h{padding:16px;text-align:center;font-size:14px;font-weight:700;letter-spacing:3px;
+    border-bottom:2px solid var(--ink);}
+  .sheet-b{padding:16px;overflow-y:auto;}
+  .sheet-b label{display:block;margin-bottom:13px;}
+  .sheet-b label span{display:block;font-size:11px;letter-spacing:2px;color:#9a9a9a;margin-bottom:5px;}
+  .sheet-b input,.sheet-b textarea,.sheet-b select{width:100%;border:1.5px solid #d4d4d4;border-radius:12px;
+    background:none;padding:10px 13px;font-size:15px;font-family:inherit;color:var(--ink2);outline:none;resize:none;}
+  .sheet-b input:focus,.sheet-b textarea:focus,.sheet-b select:focus{border-color:var(--ink);}
+  .sheet-f{display:flex;gap:10px;padding:12px 16px calc(16px + env(safe-area-inset-bottom));
+    border-top:1.5px solid #eee;}
+  .sheet-f button{flex:1;border:2.5px solid var(--ink);background:none;border-radius:999px;
+    font-family:inherit;font-size:14px;font-weight:600;letter-spacing:2px;color:var(--ink2);padding:11px;}
+  .sheet-f .primary{background:var(--red);border-color:var(--red);color:#fff;}
+
+  /* ===== 对战 ===== */
+  .score{display:flex;align-items:center;gap:10px;}
+  .sbox{flex:1;border:2.5px solid var(--ink);border-radius:16px;padding:14px 10px 12px;text-align:center;}
+  .sbox .nm{display:block;font-size:12px;letter-spacing:2px;color:#8a8a8a;
+    border-bottom:1px dashed #d8d8d8;padding-bottom:5px;margin-bottom:8px;}
+  .sbox b{display:block;font-size:44px;font-weight:800;line-height:1;font-variant-numeric:tabular-nums;}
+  .sops{display:flex;gap:8px;margin-top:11px;}
+  .sops button{flex:1;border:2px solid var(--ink);background:none;border-radius:999px;
+    font-family:inherit;font-size:17px;font-weight:700;color:var(--ink2);padding:5px 0;}
+  .sops button:last-child{background:var(--yellow);}
+  .sops button:active{transform:scale(.93);}
+  .vs{font-size:11px;letter-spacing:2px;color:var(--red);font-weight:700;}
+
+  .rps{border:2.5px solid var(--ink);border-radius:16px;padding:14px;}
+  .rps-row{margin-bottom:14px;}
+  .rps-row:last-of-type{margin-bottom:0;}
+  .rps-nm{font-size:12px;letter-spacing:2px;color:#8a8a8a;margin-bottom:8px;}
+  .hands{display:flex;gap:9px;}
+  .hands button{flex:1;aspect-ratio:1.6;border:2px solid var(--ink);background:none;border-radius:13px;
+    font-family:inherit;font-size:19px;font-weight:700;color:var(--ink2);}
+  .hands button:active{background:var(--yellow);}
+  .picked{display:none;font-size:14px;font-weight:700;letter-spacing:3px;color:var(--red);
+    border:2px dashed var(--red);border-radius:13px;text-align:center;padding:13px;}
+  .rps-row.done .hands{display:none;}
+  .rps-row.done .picked{display:block;}
+  .rps.over .rps-row{display:none;}
+  .showbtn{display:none;width:100%;margin-top:14px;border:2.5px solid var(--red);background:var(--red);
+    color:#fff;border-radius:999px;font-family:inherit;font-size:15px;font-weight:700;letter-spacing:4px;padding:12px;}
+  .showbtn:active{transform:scale(.97);}
+  .rps.ready .showbtn{display:block;}
+  .rps.over .showbtn{display:none;}
+
+  .reveal{display:none;}
+  .rps.over .reveal{display:block;animation:pop .35s cubic-bezier(.2,1.3,.4,1);}
+  .hands-show{display:flex;align-items:center;justify-content:center;gap:18px;}
+  .hands-show>div{text-align:center;}
+  .hands-show i{display:flex;align-items:center;justify-content:center;width:72px;height:72px;
+    border:3px solid var(--ink);border-radius:50%;font-size:30px;font-weight:800;font-style:normal;margin-bottom:7px;}
+  .hands-show span{font-size:11px;letter-spacing:2px;color:#8a8a8a;}
+  .hands-show .mid{color:#d4d4d4;font-size:20px;align-self:flex-start;margin-top:26px;}
+  .verdict{text-align:center;font-size:20px;font-weight:800;letter-spacing:3px;margin:16px 0 4px;color:var(--red);}
+  .rps-f{display:flex;gap:10px;margin-top:14px;}
+  .rps-f button{flex:1;border:2.5px solid var(--ink);background:none;border-radius:999px;
+    font-family:inherit;font-size:13px;font-weight:600;letter-spacing:1px;color:var(--ink2);padding:10px;}
+  .rps-f .primary{background:var(--red);border-color:var(--red);color:#fff;}
+  .rps-f button:disabled{opacity:.35;}
 </style>
 </head>
 <body>
@@ -166,6 +245,7 @@
   <div class="list-wrap">
     <div class="sec-title">议题收集</div>
     <div id="topicList"></div>
+    <div class="tools"><button data-exp>导出给 Claude</button><button data-reset>恢复线上版</button></div>
   </div>
 </div>
 
@@ -173,6 +253,65 @@
   <div class="list-wrap">
     <div class="sec-title">决议</div>
     <div id="resList"></div>
+    <div class="tools"><button data-exp>导出给 Claude</button><button data-reset>恢复线上版</button></div>
+  </div>
+</div>
+
+<div class="page" id="page-game">
+  <div class="list-wrap">
+    <div class="sec-title">积分</div>
+    <div class="score">
+      <div class="sbox">
+        <span class="nm" data-nm="a">包包</span>
+        <b id="sa">0</b>
+        <div class="sops"><button data-dec="a">−</button><button data-inc="a">＋</button></div>
+      </div>
+      <div class="vs">VS</div>
+      <div class="sbox">
+        <span class="nm" data-nm="b">秀秀</span>
+        <b id="sb">0</b>
+        <div class="sops"><button data-dec="b">−</button><button data-inc="b">＋</button></div>
+      </div>
+    </div>
+    <div class="tools"><button id="scReset">重置比分</button></div>
+
+    <div class="sec-title" style="margin-top:26px">石头剪刀布</div>
+    <div class="rps">
+      <div class="rps-row" id="rowA">
+        <div class="rps-nm"><span data-nm2="a">包包</span> 出拳</div>
+        <div class="hands"><button data-h="a" data-v="石">石</button><button data-h="a" data-v="剪">剪</button><button data-h="a" data-v="布">布</button></div>
+        <div class="picked">已出拳 ✓</div>
+      </div>
+      <div class="rps-row" id="rowB">
+        <div class="rps-nm"><span data-nm2="b">秀秀</span> 出拳</div>
+        <div class="hands"><button data-h="b" data-v="石">石</button><button data-h="b" data-v="剪">剪</button><button data-h="b" data-v="布">布</button></div>
+        <div class="picked">已出拳 ✓</div>
+      </div>
+      <button id="showBtn" class="showbtn">揭晓</button>
+      <div class="reveal" id="reveal">
+        <div class="hands-show">
+          <div><i id="ha">石</i><span data-nm3="a">包包</span></div>
+          <div class="mid">—</div>
+          <div><i id="hb">布</i><span data-nm3="b">秀秀</span></div>
+        </div>
+        <div class="verdict" id="verdict">平局</div>
+        <div class="rps-f">
+          <button id="winAdd">胜者 +1</button>
+          <button id="rpsAgain" class="primary">再来一局</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal" id="modal">
+  <div class="sheet">
+    <div class="sheet-h" id="mTitle">编辑</div>
+    <div class="sheet-b" id="mBody"></div>
+    <div class="sheet-f">
+      <button id="mCancel">取消</button>
+      <button id="mSave" class="primary">保存</button>
+    </div>
   </div>
 </div>
 
@@ -180,6 +319,7 @@
   <button data-page="wheel" class="on">转盘</button>
   <button data-page="topic">议题</button>
   <button data-page="res">决议<span class="dot" id="dot" style="display:none"></span></button>
+  <button data-page="game">对战</button>
 </nav>
 
 <script>
@@ -339,43 +479,192 @@ const RESOLUTIONS=[
 const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 const PRI={"高":"red","中":"yellow","低":"plain"};
 
+/* 本地可编辑副本：有改动就用本地的，没有就用上面写死的 */
+const load=(k,def)=>{try{const v=JSON.parse(localStorage.getItem(k));return Array.isArray(v)?v:def.slice();}catch(e){return def.slice();}};
+let topics=load("kw_topics",TOPICS);
+let resol =load("kw_res",RESOLUTIONS);
+const saveT=()=>localStorage.setItem("kw_topics",JSON.stringify(topics));
+const saveR=()=>localStorage.setItem("kw_res",JSON.stringify(resol));
+
+const F_TOPIC=[
+  {k:"topic",t:"议题",req:1},{k:"from",t:"发起人"},{k:"join",t:"需参与讨论"},
+  {k:"pri",t:"优先级",opt:["高","中","低"]},
+  {k:"plan",t:"计划日期",ph:"2026/9/25-2026/9/27"},{k:"actual",t:"实际日期"},
+  {k:"note",t:"备注",area:1}
+];
+const F_RES=[
+  {k:"cat",t:"类别",ph:"决议1"},{k:"content",t:"内容",area:1,req:1},
+  {k:"action",t:"采取措施",area:1},
+  {k:"status",t:"状态",opt:["未完成","进行中","已完成"]},
+  {k:"date",t:"会议时间"},{k:"due",t:"截止日期"},
+  {k:"valid",t:"决议状态",opt:["有效","已失效"]}
+];
+
 function renderTopics(){
   const box=document.getElementById("topicList");
-  if(!TOPICS.length){box.innerHTML='<div class="empty">暂无议题</div>';return;}
-  box.innerHTML=TOPICS.map(t=>`
+  box.innerHTML=(topics.length?topics.map((t,i)=>`
     <div class="card">
       <div class="top">
-        <span class="no">NO.${esc(t.no)}</span>
+        <span class="no">NO.${esc(t.no||i+1)}</span>
         <h3>${esc(t.topic)}</h3>
-        <span class="pill ${PRI[t.pri]||"plain"}">${esc(t.pri)}</span>
+        <span class="pill ${PRI[t.pri]||"plain"}">${esc(t.pri||"—")}</span>
       </div>
-      <div class="row"><b>${esc(t.from)}</b> 发起${t.join?` · 需 <b>${esc(t.join)}</b> 参与`:""}</div>
-      <div class="row"><span class="label">计划</span>${esc(t.plan)}${t.actual?`　<span class="label">实际</span>${esc(t.actual)}`:""}</div>
+      <div class="row">${t.from?`<b>${esc(t.from)}</b> 发起`:""}${t.join?` · 需 <b>${esc(t.join)}</b> 参与`:""}</div>
+      <div class="row"><span class="label">计划</span>${esc(t.plan||"—")}${t.actual?`　<span class="label">实际</span>${esc(t.actual)}`:""}</div>
       ${t.note?`<div class="note">${esc(t.note)}</div>`:""}
-    </div>`).join("");
+      <div class="ops"><button data-e="t" data-i="${i}">编辑</button><button data-d="t" data-i="${i}">删除</button></div>
+    </div>`).join(""):'<div class="empty">暂无议题</div>')
+    +`<button class="addbtn" data-new="t">＋ 新增议题</button>`;
+  bind();
 }
 
 function renderRes(){
   const box=document.getElementById("resList");
-  if(!RESOLUTIONS.length){box.innerHTML='<div class="empty">暂无决议</div>';return;}
   const order=r=>r.status==="已完成"?1:0;
-  const list=RESOLUTIONS.slice().sort((a,b)=>order(a)-order(b));
-  box.innerHTML=list.map(r=>{
-    const done=r.status==="已完成";
+  const idx=resol.map((r,i)=>i).sort((a,b)=>order(resol[a])-order(resol[b]));
+  box.innerHTML=(resol.length?idx.map(i=>{
+    const r=resol[i],done=r.status==="已完成";
     const cls=done?"ink":(r.status==="进行中"?"yellow":"red");
     return `
     <div class="card${done?" done":""}">
       <div class="top">
-        <span class="no">${esc(r.cat)}</span>
-        <span class="pill ${cls}" style="margin-left:auto">${esc(r.status)}</span>
+        <span class="no">${esc(r.cat||"决议")}</span>
+        <span class="pill ${cls}" style="margin-left:auto">${esc(r.status||"未完成")}</span>
       </div>
       <div class="body">${esc(r.content)}</div>
-      <div class="note"><span class="label">采取措施</span>${esc(r.action)}</div>
-      <div class="row"><span class="label">会议</span>${esc(r.date)}　<span class="label">截止</span>${esc(r.due)}　<span class="label">状态</span>${esc(r.valid)}</div>
-    </div>`;}).join("");
-  const undone=RESOLUTIONS.filter(r=>r.status!=="已完成").length;
-  document.getElementById("dot").style.display=undone?"inline-block":"none";
+      ${r.action?`<div class="note"><span class="label">采取措施</span>${esc(r.action)}</div>`:""}
+      <div class="row"><span class="label">会议</span>${esc(r.date||"—")}　<span class="label">截止</span>${esc(r.due||"—")}　<span class="label">状态</span>${esc(r.valid||"—")}</div>
+      <div class="ops"><button data-e="r" data-i="${i}">编辑</button><button data-d="r" data-i="${i}">删除</button></div>
+    </div>`;}).join(""):'<div class="empty">暂无决议</div>')
+    +`<button class="addbtn" data-new="r">＋ 新增决议</button>`;
+  document.getElementById("dot").style.display=resol.filter(r=>r.status!=="已完成").length?"inline-block":"none";
+  bind();
 }
+
+function bind(){
+  document.querySelectorAll("[data-e]").forEach(b=>b.onclick=()=>openForm(b.dataset.e,+b.dataset.i));
+  document.querySelectorAll("[data-new]").forEach(b=>b.onclick=()=>openForm(b.dataset.new,null));
+  document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{
+    const isT=b.dataset.d==="t",i=+b.dataset.i;
+    const name=isT?topics[i].topic:resol[i].content;
+    if(!confirm("删除「"+String(name).slice(0,12)+"…」？"))return;
+    if(isT){topics.splice(i,1);topics.forEach((t,k)=>t.no=k+1);saveT();renderTopics();}
+    else{resol.splice(i,1);saveR();renderRes();}
+  });
+}
+
+/* ===== 编辑弹层 ===== */
+let cur={type:null,idx:null};
+function openForm(type,idx){
+  cur={type,idx};
+  const fields=type==="t"?F_TOPIC:F_RES;
+  const data=idx==null?{}:(type==="t"?topics[idx]:resol[idx]);
+  document.getElementById("mTitle").textContent=(idx==null?"新增":"编辑")+(type==="t"?"议题":"决议");
+  document.getElementById("mBody").innerHTML=fields.map(f=>{
+    const v=esc(data[f.k]||"");
+    const input=f.opt
+      ? `<select data-k="${f.k}">${f.opt.map(o=>`<option${data[f.k]===o?" selected":""}>${o}</option>`).join("")}</select>`
+      : f.area
+        ? `<textarea data-k="${f.k}" rows="2" placeholder="${f.ph||""}">${v}</textarea>`
+        : `<input data-k="${f.k}" value="${v}" placeholder="${f.ph||""}">`;
+    return `<label><span>${f.t}${f.req?" *":""}</span>${input}</label>`;
+  }).join("");
+  document.getElementById("modal").classList.add("on");
+}
+function closeForm(){document.getElementById("modal").classList.remove("on");}
+document.getElementById("mCancel").onclick=closeForm;
+document.getElementById("mSave").onclick=()=>{
+  const o={};
+  document.querySelectorAll("#mBody [data-k]").forEach(el=>o[el.dataset.k]=el.value.trim());
+  const fields=cur.type==="t"?F_TOPIC:F_RES;
+  const miss=fields.find(f=>f.req&&!o[f.k]);
+  if(miss){alert("「"+miss.t+"」不能为空");return;}
+  if(cur.type==="t"){
+    if(cur.idx==null)topics.push(o); else topics[cur.idx]=Object.assign({},topics[cur.idx],o);
+    topics.forEach((t,k)=>t.no=k+1);saveT();renderTopics();
+  }else{
+    if(cur.idx==null)resol.push(o); else resol[cur.idx]=Object.assign({},resol[cur.idx],o);
+    saveR();renderRes();
+  }
+  closeForm();
+};
+document.getElementById("modal").onclick=e=>{if(e.target.id==="modal")closeForm();};
+
+/* 导出 / 恢复 */
+document.querySelectorAll("[data-exp]").forEach(b=>b.onclick=async()=>{
+  const txt=JSON.stringify({topics,resolutions:resol},null,2);
+  try{await navigator.clipboard.writeText(txt);alert("已复制，发给 Claude 就能同步到线上");}
+  catch(e){prompt("复制下面的内容：",txt);}
+});
+document.querySelectorAll("[data-reset]").forEach(b=>b.onclick=()=>{
+  if(!confirm("放弃本机的所有修改，恢复成线上那份？"))return;
+  localStorage.removeItem("kw_topics");localStorage.removeItem("kw_res");
+  topics=TOPICS.slice();resol=RESOLUTIONS.slice();renderTopics();renderRes();
+});
+
+/* ========== 积分 & 石头剪刀布 ========== */
+const G={
+  names:JSON.parse(localStorage.getItem("kw_names")||'null')||{a:"包包",b:"秀秀"},
+  score:JSON.parse(localStorage.getItem("kw_score")||'null')||{a:0,b:0}
+};
+const saveG=()=>{localStorage.setItem("kw_names",JSON.stringify(G.names));
+                 localStorage.setItem("kw_score",JSON.stringify(G.score));};
+function paintG(){
+  document.getElementById("sa").textContent=G.score.a;
+  document.getElementById("sb").textContent=G.score.b;
+  document.querySelectorAll("[data-nm],[data-nm2],[data-nm3]").forEach(el=>{
+    const k=el.dataset.nm||el.dataset.nm2||el.dataset.nm3;
+    el.textContent=G.names[k];
+  });
+}
+document.querySelectorAll("[data-inc]").forEach(b=>b.onclick=()=>{
+  G.score[b.dataset.inc]++;saveG();paintG();if(navigator.vibrate)navigator.vibrate(12);});
+document.querySelectorAll("[data-dec]").forEach(b=>b.onclick=()=>{
+  const k=b.dataset.dec;G.score[k]=Math.max(0,G.score[k]-1);saveG();paintG();});
+document.querySelectorAll("[data-nm]").forEach(el=>el.onclick=()=>{
+  const v=prompt("改个名字",G.names[el.dataset.nm]);
+  if(v&&v.trim()){G.names[el.dataset.nm]=v.trim().slice(0,6);saveG();paintG();}});
+document.getElementById("scReset").onclick=()=>{
+  if(!confirm("比分清零？"))return;G.score={a:0,b:0};saveG();paintG();};
+
+/* 出拳：选完就隐藏，两边都出了才揭晓 */
+const BEAT={"石":"剪","剪":"布","布":"石"};
+let pick={a:null,b:null},winner=null;
+const rps=document.querySelector(".rps");
+document.querySelectorAll("[data-h]").forEach(b=>b.onclick=()=>{
+  const k=b.dataset.h;
+  if(pick[k])return;
+  pick[k]=b.dataset.v;
+  document.getElementById(k==="a"?"rowA":"rowB").classList.add("done");
+  if(navigator.vibrate)navigator.vibrate(10);
+  if(pick.a&&pick.b)rps.classList.add("ready");
+});
+document.getElementById("showBtn").onclick=showResult;
+function showResult(){
+  document.getElementById("ha").textContent=pick.a;
+  document.getElementById("hb").textContent=pick.b;
+  const v=document.getElementById("verdict");
+  if(pick.a===pick.b){winner=null;v.textContent="平局";}
+  else if(BEAT[pick.a]===pick.b){winner="a";v.textContent=G.names.a+" 胜";}
+  else{winner="b";v.textContent=G.names.b+" 胜";}
+  document.getElementById("winAdd").disabled=!winner;
+  document.getElementById("winAdd").textContent=winner?G.names[winner]+" +1":"平局不加分";
+  rps.classList.add("over");
+  if(navigator.vibrate)navigator.vibrate([25,45,25]);
+}
+document.getElementById("winAdd").onclick=()=>{
+  if(!winner)return;
+  G.score[winner]++;saveG();paintG();
+  document.getElementById("winAdd").disabled=true;
+  document.getElementById("winAdd").textContent="已加分 ✓";
+};
+document.getElementById("rpsAgain").onclick=()=>{
+  pick={a:null,b:null};winner=null;
+  rps.classList.remove("over");rps.classList.remove("ready");
+  document.getElementById("rowA").classList.remove("done");
+  document.getElementById("rowB").classList.remove("done");
+};
+paintG();
 
 document.querySelectorAll(".tabs button").forEach(b=>{
   b.onclick=()=>{
